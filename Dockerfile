@@ -14,18 +14,12 @@ RUN addgroup -g 1000 pocketbase && \
 # Set working directory
 WORKDIR /app
 
-# Copy the PocketBase binary (if you have it locally)
-# If you want to download it during build, comment out the COPY line and uncomment the download lines below
-COPY pocketbase /app/pocketbase
-
-# Alternative: Download PocketBase during build (uncomment these lines if needed)
-# ARG PB_VERSION=0.22.20
-# RUN wget https://github.com/pocketbase/pocketbase/releases/download/v${PB_VERSION}/pocketbase_${PB_VERSION}_linux_amd64.zip \
-#     && unzip pocketbase_${PB_VERSION}_linux_amd64.zip \
-#     && rm pocketbase_${PB_VERSION}_linux_amd64.zip
-
-# Make PocketBase executable
-RUN chmod +x /app/pocketbase
+# Download PocketBase during build
+ARG PB_VERSION=0.22.20
+RUN wget https://github.com/pocketbase/pocketbase/releases/download/v${PB_VERSION}/pocketbase_${PB_VERSION}_linux_amd64.zip \
+    && unzip pocketbase_${PB_VERSION}_linux_amd64.zip \
+    && rm pocketbase_${PB_VERSION}_linux_amd64.zip \
+    && chmod +x /app/pocketbase
 
 # Create directories for data and migrations
 RUN mkdir -p /app/pb_data /app/pb_migrations
