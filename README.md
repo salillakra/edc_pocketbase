@@ -252,9 +252,6 @@ docker-compose up -d
 - [PocketBase GitHub](https://github.com/pocketbase/pocketbase)
 - [Docker Documentation](https://docs.docker.com/)
 
-## 📄 License
-
-[Your License Here]
 
 ## 🤝 Contributing
 
