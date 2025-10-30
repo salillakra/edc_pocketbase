@@ -24,8 +24,8 @@ RUN wget https://github.com/pocketbase/pocketbase/releases/download/v${PB_VERSIO
 # Create directories for data and migrations
 RUN mkdir -p /app/pb_data /app/pb_migrations
 
-# Copy migrations if they exist
-COPY pb_migrations /app/pb_migrations
+# Copy migrations only if you need them (comment out if you want to start fresh)
+# COPY pb_migrations /app/pb_migrations
 
 # Change ownership to pocketbase user
 RUN chown -R pocketbase:pocketbase /app
@@ -33,15 +33,15 @@ RUN chown -R pocketbase:pocketbase /app
 # Switch to non-root user
 USER pocketbase
 
-# Expose the port (Render will set the PORT env variable)
+# Expose the port
 EXPOSE 8080
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-    CMD wget --no-verbose --tries=1 --spider http://localhost:${PORT:-8080}/api/health || exit 1
+    CMD wget --no-verbose --tries=1 --spider http://localhost:8080/api/health || exit 1
 
 # Set the entrypoint to run PocketBase
 ENTRYPOINT ["/app/pocketbase"]
 
-# Default command - Render will use PORT env variable
+# Default command
 CMD ["serve", "--http=0.0.0.0:8080"]
