@@ -33,15 +33,15 @@ RUN chown -R pocketbase:pocketbase /app
 # Switch to non-root user
 USER pocketbase
 
-# Expose the default PocketBase port
+# Expose the port (Render will set the PORT env variable)
 EXPOSE 8080
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-    CMD wget --no-verbose --tries=1 --spider http://localhost:8080/api/health || exit 1
+    CMD wget --no-verbose --tries=1 --spider http://localhost:${PORT:-8080}/api/health || exit 1
 
 # Set the entrypoint to run PocketBase
 ENTRYPOINT ["/app/pocketbase"]
 
-# Default command to serve PocketBase
+# Default command - Render will use PORT env variable
 CMD ["serve", "--http=0.0.0.0:8080"]
